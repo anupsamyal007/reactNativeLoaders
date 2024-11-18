@@ -49,8 +49,14 @@ jobs:
       - name: Build Android
         run: |
           cd android
-          ./gradlew assembleRelease
+          ./gradlew clean assembleRelease  # This generates the APK
 
+      # List contents of the build output directory for debugging
+      - name: List output directory contents
+        run: |
+          ls -R android/app/build/outputs/
+
+      # Upload APK
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
