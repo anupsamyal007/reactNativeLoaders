@@ -57,7 +57,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: ${{ env.VERSION_NAME }}.apk
-          path: android/app/build/outputs/apk/release/${{ env.VERSION_NAME }}.apk
+          path: android/app/build/outputs/apk/release/app-release.apk
 
           
       - name: Verify APK exists
