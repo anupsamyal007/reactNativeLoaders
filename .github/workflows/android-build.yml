@@ -53,10 +53,6 @@ jobs:
           VERSION_NAME=$(grep versionName android/app/build.gradle | head -n 1 | sed 's/.*versionName "\([^"]*\)".*/\1/')
           echo "VERSION_NAME=${VERSION_NAME}" >> $GITHUB_ENV
 
-      - name: List output directory contents
-        run: |
-          ls -R android/app/
-
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
