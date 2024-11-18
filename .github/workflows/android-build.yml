@@ -50,15 +50,27 @@ jobs:
         run: |
           cd android
           ./gradlew clean assembleRelease  # This generates the APK
+      - name: Get version name
+        id: get_version
+        run: |
+          VERSION_NAME=$(grep versionName android/app/build.gradle | head -n 1 | sed 's/.*versionName "\([^"]*\)".*/\1/')
+          echo "VERSION_NAME=${VERSION_NAME}" >> $GITHUB_ENV
 
-      # List contents of the build output directory for debugging
       - name: List output directory contents
         run: |
-          ls -R android/app/build/outputs/
+          ls -R android/app/
 
-      # Upload APK
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
-          name: app-release.apk
-          path: ./
+          name: ${{ env.VERSION_NAME }}.apk
+          path: android/app/build/outputs/apk/release/${{ env.VERSION_NAME }}.apk
+
+          
+      - name: Verify APK exists
+        run: |
+          if [ -f android/app/build/outputs/apk/release/app-release.apk ]; then
+            echo "APK found!"
+          else
+            echo "APK not found. Something went wrong."
+          fi
