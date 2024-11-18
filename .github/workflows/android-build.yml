@@ -17,10 +17,10 @@ jobs:
 
       - name: Check out code
         uses: actions/checkout@v3
-        
+
       - name: Checkout repository
         uses: actions/checkout@v2
-      
+
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
@@ -28,19 +28,19 @@ jobs:
 
       - name: Install dependencies
         run: yarn install
-  
+
       - name: Set up Keystore
         run: |
           mkdir -p ~/.android
           echo "$ANDROID_KEYSTORE_BASE64" | base64 -d > ~/.android/my-release-key.jks
         env:
-          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }} 
+          ANDROID_KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
 
       - name: Set up Gradle signing properties
         run: |
-          echo "MY_KEYSTORE_PASSWORD=${{ secrets.MY_KEYSTORE_PASSWORD }}" >> ~/.gradle/gradle.properties
-          echo "MY_KEY_ALIAS=${{ secrets.MY_KEY_ALIAS }}" >> ~/.gradle/gradle.properties
-          echo "MY_KEY_PASSWORD=${{ secrets.MY_KEY_PASSWORD }}" >> ~/.gradle/gradle.properties
+          echo "MY_KEYSTORE_PASSWORD=${{ secrets.MY_KEYSTORE_PASSWORD }}" >> android/gradle.properties
+          echo "MY_KEY_ALIAS=${{ secrets.MY_KEY_ALIAS }}" >> android/gradle.properties
+          echo "MY_KEY_PASSWORD=${{ secrets.MY_KEY_PASSWORD }}" >> android/gradle.properties
         env:
           MY_KEYSTORE_PASSWORD: ${{ secrets.MY_KEYSTORE_PASSWORD }}
           MY_KEY_ALIAS: ${{ secrets.MY_KEY_ALIAS }}
@@ -50,7 +50,7 @@ jobs:
         run: |
           cd android
           ./gradlew assembleRelease
-          
+
       - name: Upload APK
         uses: actions/upload-artifact@v3
         with:
